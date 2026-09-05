@@ -6,6 +6,8 @@ import { BiBrightness } from "react-icons/bi";
 import Cal from "./components/Cal";
 import Note from "./components/Note";
 import Terminal from "./components/Terminal";
+import Weather from "./components/Weather";
+import Chatbot from "./components/Chatbot";
 import Setting from "./components/Setting";
 
 interface AppItem {
@@ -34,6 +36,10 @@ const apps: AppItem[] = [
   {
     name: "Notes",
     icon: "https://upload.wikimedia.org/wikipedia/commons/0/07/Notepad_Win11.svg"
+  },
+  {
+    name: "Chatbot",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"
   },
   {
     name: "Settings",
@@ -109,7 +115,7 @@ const App = () => {
           >
             Open Terminal
           </button>
-        </div>
+        </div>  
       )}
 
       <div className="flex flex-col items-start p-2">
@@ -117,9 +123,9 @@ const App = () => {
           <button
             key={app.name}
             onDoubleClick={() => openApp(app.name)}
-            className="h-20 w-20 mx-2 my-4 flex flex-col items-center justify-center gap-2 text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+            className="h-20 w-20 mx-2 my-3 gap-3 flex flex-col items-center justify-center text-white rounded-lg transition-colors cursor-pointer"
           >
-            <img src={app.icon} alt={app.name} className="w-[30px] h-[30px] object-contain" />
+            <img src={app.icon} alt={app.name} className="w-[25px] h-[25px] object-contain" />
             <span className="text-xs font-semibold">{app.name}</span>
           </button>
         ))}
@@ -129,10 +135,10 @@ const App = () => {
         <section className="h-full hidden md:flex items-center w-24 shrink-0"></section>
 
         <section className="h-full flex gap-1 sm:gap-2 items-center justify-center flex-1 max-w-full overflow-x-auto scrollbar-none">
-          <button className="hover:bg-white/10 hover:border hover:border-gray-900 hover:scale-105 rounded-md h-9 w-9 sm:h-10 sm:w-10 shrink-0 flex items-center justify-center transition-all cursor-pointer">
+          <button className="hover:bg-white/10 hover:scale-105 rounded-md h-9 w-9 sm:h-10 sm:w-10 shrink-0 flex items-center justify-center transition-all cursor-pointer">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Windows_logo_-_2021.svg" alt="Start" className="w-[20px] h-[20px] sm:w-[24px] sm:h-[24px] object-contain" />
           </button>
-          <button className="hover:bg-white/10 hover:border hover:border-gray-900 hover:scale-105 rounded-md h-9 w-9 sm:h-10 sm:w-10 shrink-0 flex items-center justify-center transition-all cursor-pointer">
+          <button className="hover:bg-white/10 hover:scale-105 rounded-md h-9 w-9 sm:h-10 sm:w-10 shrink-0 flex items-center justify-center transition-all cursor-pointer">
             <IoSearch className="text-lg sm:text-2xl" />
           </button>
           {apps.filter((app) => app.name !== "Settings").map((app) => {
@@ -141,7 +147,7 @@ const App = () => {
               <button
                 key={app.name}
                 onClick={() => openApp(app.name)}
-                className={`relative hover:bg-white/10 hover:border hover:border-gray-900 hover:scale-105 rounded-md h-9 w-9 sm:h-10 sm:w-10 shrink-0 flex items-center justify-center transition-all cursor-pointer ${
+                className={`relative hover:bg-white/10 hover:scale-105 rounded-md h-9 w-9 sm:h-10 sm:w-10 shrink-0 flex items-center justify-center transition-all cursor-pointer ${
                   isOpened ? "bg-white/10" : ""
                 }`}
               >
@@ -184,7 +190,7 @@ const App = () => {
                     <VolumeIcon volume={volume} />
                     <input
                       type="range"
-                      className="w-full h-2 accent-purple-500 cursor-pointer"
+                      className="w-full h-1 accent-purple-300 cursor-pointer"
                       max={100}
                       value={volume}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVolume(Number(e.target.value))}
@@ -194,7 +200,7 @@ const App = () => {
                     <BiBrightness size={20} />
                     <input
                       type="range"
-                      className="w-full h-2 accent-purple-500 cursor-pointer"
+                      className="w-full h-1  accent-purple-300 cursor-pointer"
                       max={100}
                       value={bright}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBright(Number(e.target.value))}
@@ -252,13 +258,9 @@ const App = () => {
           {opened === "Calculator" && <Cal />}
           {opened === "Notes" && <Note />}
           {opened === "Terminal" && <Terminal />}
-          {opened === "Weather" && <Setting />}
-          {opened === "Settings" && (
-            <div className="flex flex-col items-center justify-center h-full text-white gap-3 p-4">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Windows_Settings_icon.svg" alt="Settings" className="w-16 h-16 object-contain" />
-              <h2 className="text-xl font-medium">Settings</h2>
-            </div>
-          )}
+          {opened === "Weather" && <Weather />}
+          {opened === "Chatbot" && <Chatbot />}
+          {opened === "Settings" && <Setting />}
           {!opened && <div className="flex items-center justify-center h-full text-2xl text-white">Open an app</div>}
         </section>
       </div>
