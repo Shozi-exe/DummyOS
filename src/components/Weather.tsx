@@ -44,8 +44,8 @@ const Weather = () => {
     const load = async (lat: number, lon: number) => {
       try {
         const [geoRes, weatherRes] = await Promise.all([
-          fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`).catch(() => null),
-          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation,weather_code`).catch(() => null)
+          fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=jsonnull`).catch(() => null),
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation,weather_codenull`).catch(() => null)
         ])
 
         if (geoRes && geoRes.ok) {
@@ -54,7 +54,7 @@ const Weather = () => {
           const country = data.address?.country
           if (city || country) setLocation([city, country].filter(Boolean).join(", "))
         } else {
-          const fallback = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`).then(r => r.json()).catch(() => null)
+          const fallback = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ennull`).then(r => r.json()).catch(() => null)
           if (fallback) {
             const city = fallback.city || fallback.locality || fallback.principalSubdivision
             const country = fallback.countryName

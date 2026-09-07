@@ -65,6 +65,8 @@ const App = () => {
   const [min, setMin] = useState<boolean>(false);
   const [opened, setOpened] = useState<string | null>(null);
   const [act, setAct] = useState<boolean>(false);
+  const [isize , setIsize] = useState<string>("md");
+
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -90,8 +92,10 @@ const App = () => {
       }}
       onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
         if (e.button === 2) {
-          setRightClick(true);
-          setPosition({ x: e.clientX, y: e.clientY });
+          if (!act || min) {
+            setRightClick(true);
+            setPosition({ x: e.clientX, y: e.clientY });
+          }
         } else {
           setRightClick(false);
         }
@@ -100,18 +104,57 @@ const App = () => {
     >
       {rightClick && (!act || min) && (
         <div
-          className="absolute bg-[#47424280] text-white w-32 rounded-md shadow-lg backdrop-blur-md z-50 text-xs"
+          onMouseDown={(e) => e.stopPropagation()}
+          className="absolute bg-[#47424280] text-white w-45 rounded-md shadow-lg backdrop-blur-md z-50 text-xs"
           style={{ top: position.y, left: position.x }}
         >
           <button
-            onClick={() => window.location.reload()}
-            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer border-b border-white/20"
+            onClick={() => {
+              setIsize("sm");
+              setRightClick(false);
+            }}
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
+          >
+            Small icons
+          </button>
+          <button
+            onClick={() => {
+              setIsize("md");
+              setRightClick(false);
+            }}
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
+          >
+            Medium icons
+          </button>
+          <button
+            onClick={() => {
+              setIsize("lg");
+              setRightClick(false);
+            }}
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
+          >
+            Large icons
+          </button>
+          <button
+            onClick={() => {
+              window.location.reload();
+            }}
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer border-t border-white/20"
           >
             Refresh
           </button>
           <button
+            onClick={() => {
+              setIsize("lg");
+              setRightClick(false);
+            }}
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer border-b border-white/20"
+          >
+            Personalize
+          </button>
+          <button
             onClick={() => openApp("Terminal")}
-            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer border-t border-white/20"
           >
             Open Terminal
           </button>
@@ -123,9 +166,9 @@ const App = () => {
           <button
             key={app.name}
             onDoubleClick={() => openApp(app.name)}
-            className="h-20 w-20 mx-2 my-3 gap-3 flex flex-col items-center justify-center text-white rounded-lg transition-colors cursor-pointer"
+            className={`${isize === "lg" ? "h-16 w-16" : isize === "md" ? "h-14 w-14" : "h-12 w-12"} mx-2 my-4 gap-3 flex flex-col items-center justify-center text-white rounded-lg transition-colors cursor-pointer`}
           >
-            <img src={app.icon} alt={app.name} className="w-[25px] h-[25px] object-contain" />
+            <img src={app.icon} alt={app.name} className={`${isize === "lg" ? "h-8 w-8" : isize === "md" ? "h-7 w-7" : "h-6 w-6"} object-contain`} />
             <span className="text-xs font-semibold">{app.name}</span>
           </button>
         ))}
