@@ -8,7 +8,7 @@ import Note from "./components/Note";
 import Terminal from "./components/Terminal";
 import Weather from "./components/Weather";
 import Chatbot from "./components/Chatbot";
-import Setting from "./components/Setting";
+import Browser from "./components/Browser";
 
 interface AppItem {
   name: string;
@@ -27,7 +27,7 @@ const apps: AppItem[] = [
   },
   {
     name: "Weather",
-    icon: "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Sun%20behind%20cloud/3D/sun_behind_cloud_3d.png"
+    icon: "https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Sun%20behind%20cloud/3D/sun_behind_cloud_3d.png"
   },
   {
     name: "Terminal",
@@ -42,8 +42,8 @@ const apps: AppItem[] = [
     icon: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg"
   },
   {
-    name: "Settings",
-    icon: "https://upload.wikimedia.org/wikipedia/commons/a/ac/Windows_Settings_icon.svg"
+    name: "Browser",
+    icon: "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/svg/brave.svg"
   }
 ];
 
@@ -105,7 +105,7 @@ const App = () => {
       {rightClick && (!act || min) && (
         <div
           onMouseDown={(e) => e.stopPropagation()}
-          className="absolute bg-[#47424280] text-white w-45 rounded-md shadow-lg backdrop-blur-md z-50 text-xs"
+          className="absolute bg-[#474242]/50 text-white w-[180px] rounded-md shadow-lg backdrop-blur-md z-50 text-xs"
           style={{ top: position.y, left: position.x }}
         >
           <button
@@ -174,7 +174,7 @@ const App = () => {
         ))}
       </div>
 
-      <footer className="text-white absolute w-full h-12 flex items-center justify-between px-2 sm:px-4 bottom-0 bg-[#2f2a2a] bg-gradient-to-r from-transparent to-[#330b0baa] backdrop-blur-md border-slate-800 z-30">
+      <footer className="text-white absolute w-full h-12 flex items-center justify-between px-2 sm:px-4 bottom-0 bg-[#2f2a2a] bg-gradient-to-r from-transparent to-[#330b0b]/65 backdrop-blur-md border-slate-800 z-30">
         <section className="h-full hidden md:flex items-center w-24 shrink-0"></section>
 
         <section className="h-full flex gap-1 sm:gap-2 items-center justify-center flex-1 max-w-full overflow-x-auto scrollbar-none">
@@ -218,15 +218,15 @@ const App = () => {
             {stats && (
               <div
                 onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
-                className="absolute bottom-12 right-0 bg-[#312e2ef1] text-white p-3 rounded-lg flex flex-col items-center gap-3 backdrop-blur-md h-80 w-72 max-w-[calc(100vw-1rem)] z-50 shadow-2xl"
+                className="absolute bottom-12 right-0 bg-[#312e2e]/95 text-white p-3 rounded-lg flex flex-col items-center gap-3 backdrop-blur-md h-80 w-72 max-w-[calc(100vw-1rem)] z-50 shadow-2xl"
               >
                 <div className="gap-8 p-5 grid grid-cols-3 w-full">
-                  <button className="h-13 w-13 flex items-center justify-center bg-[#504d4d82] hover:bg-[#65616182] rounded-md transition-colors cursor-pointer"><Wifi size={18} /></button>
-                  <button className="h-13 w-13 flex items-center justify-center bg-[#504d4d82] hover:bg-[#65616182] rounded-md transition-colors cursor-pointer"><Bluetooth size={18} /></button>
-                  <button className="h-13 w-13 flex items-center justify-center bg-[#504d4d82] hover:bg-[#65616182] rounded-md transition-colors cursor-pointer"><BsAirplane size={18} /></button>
-                  <button className="h-13 w-13 flex items-center justify-center bg-[#504d4d82] hover:bg-[#65616182] rounded-md transition-colors cursor-pointer"><BiBrightness size={18} /></button>
-                  <button className="h-13 w-13 flex items-center justify-center bg-[#504d4d82] hover:bg-[#65616182] rounded-md transition-colors cursor-pointer"><BatteryFull size={18} /></button>
-                  <button className="h-13 w-13 flex items-center justify-center bg-[#504d4d82] hover:bg-[#65616182] rounded-md transition-colors cursor-pointer"><SettingsIcon size={18} /></button>
+                  <button className="h-[52px] w-[52px] flex items-center justify-center bg-[#504d4d]/50 hover:bg-[#656161]/50 rounded-md transition-colors cursor-pointer"><Wifi size={18} /></button>
+                  <button className="h-[52px] w-[52px] flex items-center justify-center bg-[#504d4d]/50 hover:bg-[#656161]/50 rounded-md transition-colors cursor-pointer"><Bluetooth size={18} /></button>
+                  <button className="h-[52px] w-[52px] flex items-center justify-center bg-[#504d4d]/50 hover:bg-[#656161]/50 rounded-md transition-colors cursor-pointer"><BsAirplane size={18} /></button>
+                  <button className="h-[52px] w-[52px] flex items-center justify-center bg-[#504d4d]/50 hover:bg-[#656161]/50 rounded-md transition-colors cursor-pointer"><BiBrightness size={18} /></button>
+                  <button className="h-[52px] w-[52px] flex items-center justify-center bg-[#504d4d]/50 hover:bg-[#656161]/50 rounded-md transition-colors cursor-pointer"><BatteryFull size={18} /></button>
+                  <button className="h-[52px] w-[52px] flex items-center justify-center bg-[#504d4d]/50 hover:bg-[#656161]/50 rounded-md transition-colors cursor-pointer"><SettingsIcon size={18} /></button>
                 </div>
                 <div className="flex flex-col justify-center px-2 py-6 w-full gap-6">
                   <div className="flex items-center gap-3">
@@ -300,10 +300,10 @@ const App = () => {
         <section className="flex-1 w-full overflow-hidden">
           {opened === "Calculator" && <Cal />}
           {opened === "Notes" && <Note />}
-          {opened === "Terminal" && <Terminal />}
+          {opened === "Terminal" && <Terminal onExit={() => setAct(false)}/>}
           {opened === "Weather" && <Weather />}
           {opened === "Chatbot" && <Chatbot />}
-          {opened === "Settings" && <Setting />}
+          {opened === "Browser" && <Browser />}
           {!opened && <div className="flex items-center justify-center h-full text-2xl text-white">Open an app</div>}
         </section>
       </div>

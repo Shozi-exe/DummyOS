@@ -67,7 +67,7 @@ const Cal = () => {
 
   return (
     <div className="h-full w-full flex p-6 bg-[#272626] text-white">
-      <aside className="hidden lg:flex flex-col w-72 shrink-0 h-full bg-[#7272724a] border border-white/5 rounded-xl p-4 mr-6 overflow-hidden">
+      <aside className="hidden lg:flex flex-col w-72 shrink-0 h-full bg-[#727272]/30 border border-white/5 rounded-xl p-4 mr-6 overflow-hidden">
         <div className="flex items-center justify-between pb-3">
           <span className="text-sm font-semibold text-gray-300">History</span>
           {historyList.length > 0 && (
@@ -128,12 +128,12 @@ const Cal = () => {
                 <button
                   key={index}
                   onClick={() => handleButtonClick(btn)}
-                  className={`h-15 rounded-xl text-xl font-medium transition-all duration-150 active:scale-95 cursor-pointer flex items-center justify-center select-none shadow-sm ${
+                  className={`h-[60px] rounded-xl text-xl font-medium transition-all duration-150 active:scale-95 cursor-pointer flex items-center justify-center select-none shadow-sm ${
                     isEquals
                       ? "bg-pink-500 text-white font-semibold"
                       : isClear
-                      ? "text-rose-700 bg-[#504d4d82] hover:bg-[#63606082] font-bold"
-                      : "bg-[#504d4d82] hover:bg-[#63606082]"
+                      ? "text-rose-700 bg-[#504d4d]/50 hover:bg-[#636060]/50 font-bold"
+                      : "bg-[#504d4d]/50 hover:bg-[#636060]/50"
                   }`}
                 >
                   {btn}

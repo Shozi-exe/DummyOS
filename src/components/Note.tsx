@@ -87,7 +87,7 @@ const Note = () => {
               className={`h-7 flex items-center gap-2 px-3 border-t border-l border-r border-[#dadada] rounded-t-md cursor-pointer select-none transition-colors ${
                 active === page.id
                   ? "bg-white font-medium text-black"
-                  : "bg-[#d7d1cc5a] text-gray-600 hover:bg-white/80"
+                  : "bg-[#d7d1cc]/35 text-gray-600 hover:bg-white/80"
               }`}
             >
               {editingId === page.id ? (
