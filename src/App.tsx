@@ -65,8 +65,10 @@ const App = () => {
   const [min, setMin] = useState<boolean>(false);
   const [opened, setOpened] = useState<string | null>(null);
   const [act, setAct] = useState<boolean>(false);
-  const [isize , setIsize] = useState<string>("md");
-
+  const [isize, setIsize] = useState<string>("md");
+  const [pinnedApps, setPinnedApps] = useState<string[]>(["Weather", "Notes", "Chatbot", "Browser"]);
+  const [appMenu, setAppMenu] = useState<{ name: string; x: number; y: number } | null>(null);
+  const [taskbarMenu, setTaskbarMenu] = useState<{ name: string; x: number; y: number } | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -83,23 +85,17 @@ const App = () => {
     }
   };
 
+  const closeMenus = () => {
+    if (stats) setStats(false);
+    if (rightClick) setRightClick(false);
+    if (appMenu) setAppMenu(null);
+    if (taskbarMenu) setTaskbarMenu(null);
+  };
+
   return (
     <main
       className="h-dvh w-full relative bg-[url('/batman.jpg')] bg-cover bg-center overflow-hidden"
-      onClick={() => {
-        if (stats) setStats(false);
-        if (rightClick) setRightClick(false);
-      }}
-      onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
-        if (e.button === 2) {
-          if (!act || min) {
-            setRightClick(true);
-            setPosition({ x: e.clientX, y: e.clientY });
-          }
-        } else {
-          setRightClick(false);
-        }
-      }}
+      onClick={closeMenus}
       onContextMenu={(e: React.MouseEvent<HTMLElement>) => e.preventDefault()}
     >
       {rightClick && (!act || min) && (
@@ -109,45 +105,31 @@ const App = () => {
           style={{ top: position.y, left: position.x }}
         >
           <button
-            onClick={() => {
-              setIsize("sm");
-              setRightClick(false);
-            }}
+            onClick={() => { setIsize("sm"); setRightClick(false); }}
             className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
           >
             Small icons
           </button>
           <button
-            onClick={() => {
-              setIsize("md");
-              setRightClick(false);
-            }}
+            onClick={() => { setIsize("md"); setRightClick(false); }}
             className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
           >
             Medium icons
           </button>
           <button
-            onClick={() => {
-              setIsize("lg");
-              setRightClick(false);
-            }}
+            onClick={() => { setIsize("lg"); setRightClick(false); }}
             className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
           >
             Large icons
           </button>
           <button
-            onClick={() => {
-              window.location.reload();
-            }}
+            onClick={() => window.location.reload()}
             className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer border-t border-white/20"
           >
             Refresh
           </button>
           <button
-            onClick={() => {
-              setIsize("lg");
-              setRightClick(false);
-            }}
+            onClick={() => { setIsize("md"); setRightClick(false); }}
             className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer border-b border-white/20"
           >
             Personalize
@@ -158,13 +140,87 @@ const App = () => {
           >
             Open Terminal
           </button>
-        </div>  
+        </div>
       )}
 
-      <div className="flex flex-col items-start p-2">
+      {appMenu && (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="absolute bg-[#474242]/50 text-white w-[180px] rounded-md shadow-lg backdrop-blur-md z-50 text-xs"
+          style={{ top: appMenu.y, left: appMenu.x }}
+        >
+          <button
+            onClick={() => { openApp(appMenu.name); setAppMenu(null); }}
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
+          >
+            Open
+          </button>
+          <button
+            onClick={() => {
+              if (!pinnedApps.includes(appMenu.name)) {
+                setPinnedApps([...pinnedApps, appMenu.name]);
+              }
+              setAppMenu(null);
+            }}
+            className={`w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer border-t border-white/20 ${pinnedApps.includes(appMenu.name) ? "opacity-40 pointer-events-none" : ""}`}
+          >
+            {pinnedApps.includes(appMenu.name) ? "Pinned to Taskbar" : "Pin to Taskbar"}
+          </button>
+        </div>
+      )}
+
+      {taskbarMenu && (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="absolute bg-[#474242]/50 text-white w-[180px] rounded-md shadow-lg backdrop-blur-md z-[60] text-xs"
+          style={{ top: taskbarMenu.y, left: taskbarMenu.x }}
+        >
+          <button
+            onClick={() => { openApp(taskbarMenu.name); setTaskbarMenu(null); }}
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer"
+          >
+            Open
+          </button>
+          <button
+            onClick={() => {
+              setPinnedApps(pinnedApps.filter((n) => n !== taskbarMenu.name));
+              if (opened === taskbarMenu.name) {
+                setAct(false);
+                setOpened(null);
+              }
+              setTaskbarMenu(null);
+            }}
+            className="w-full text-left px-3 py-3 hover:bg-white/10 cursor-pointer border-t border-white/20"
+          >
+            Unpin from Taskbar
+          </button>
+        </div>
+      )}
+
+      <div
+        onMouseDown={(e: React.MouseEvent<HTMLElement>) => {
+          if (e.button === 2) {
+            if (!act || min) {
+              setRightClick(true);
+              setPosition({ x: e.clientX, y: e.clientY });
+            }
+          } else {
+            setRightClick(false);
+          }
+        }}
+        className="flex flex-col items-start p-2"
+      >
         {apps.map((app) => (
           <button
             key={app.name}
+            onMouseDown={(e) => { if (e.button === 2) e.stopPropagation(); }}
+            onContextMenu={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setRightClick(false);
+              setTaskbarMenu(null);
+              setAppMenu({ name: app.name, x: e.clientX, y: e.clientY });
+            }}
             onDoubleClick={() => openApp(app.name)}
             className={`${isize === "lg" ? "h-16 w-16" : isize === "md" ? "h-14 w-14" : "h-12 w-12"} mx-2 my-4 gap-3 flex flex-col items-center justify-center text-white rounded-lg transition-colors cursor-pointer`}
           >
@@ -184,12 +240,19 @@ const App = () => {
           <button className="hover:bg-white/10 hover:scale-105 rounded-md h-9 w-9 sm:h-10 sm:w-10 shrink-0 flex items-center justify-center transition-all cursor-pointer">
             <IoSearch className="text-lg sm:text-2xl" />
           </button>
-          {apps.filter((app) => app.name !== "Settings").map((app) => {
+          {apps.filter((app) => pinnedApps.includes(app.name)).map((app) => {
             const isOpened = act && opened === app.name;
             return (
               <button
                 key={app.name}
                 onClick={() => openApp(app.name)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setAppMenu(null);
+                  setRightClick(false);
+                  setTaskbarMenu({ name: app.name, x: e.clientX, y: e.clientY - 80 });
+                }}
                 className={`relative hover:bg-white/10 hover:scale-105 rounded-md h-9 w-9 sm:h-10 sm:w-10 shrink-0 flex items-center justify-center transition-all cursor-pointer ${
                   isOpened ? "bg-white/10" : ""
                 }`}
